@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "*"
+
+[packages]
+avro-python3 = "*"
+fastavro = "*"
+pytest = "*"
+pytest-benchmark = "*"
+tox = "*"
+
+[pipenv]
+allow_prereleases = true
+
+[requires]
+python_version = "3.7"
