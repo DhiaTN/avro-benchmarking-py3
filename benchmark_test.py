@@ -19,10 +19,10 @@ class TestBenchmark(object):
 
         def encoder(message):
             writer = avro.io.DatumWriter(schema)
-            outf = BytesIO()
-            encoder = avro.io.BinaryEncoder(outf)
+            writer_stream = BytesIO()
+            encoder = avro.io.BinaryEncoder(writer_stream)
             writer.write(message, encoder)
-            return outf.getvalue()
+            return writer_stream.getvalue()
 
         return encoder
 
@@ -32,8 +32,8 @@ class TestBenchmark(object):
 
         def decoder(encoded_message):
             reader = avro.io.DatumReader(schema)
-            stringio = BytesIO(encoded_message)
-            decoder = avro.io.BinaryDecoder(stringio)
+            reader_stream = BytesIO(encoded_message)
+            decoder = avro.io.BinaryDecoder(reader_stream)
             return reader.read(decoder)
 
         return decoder
@@ -41,9 +41,9 @@ class TestBenchmark(object):
     @pytest.fixture
     def fastavro_encoder(self, avro_schema_json):
         def encoder(message):
-            stringio = BytesIO()
-            fastavro.schemaless_writer(stringio, avro_schema_json, message)
-            return stringio.getvalue()
+            writer_stream = BytesIO()
+            fastavro.schemaless_writer(writer_stream, avro_schema_json, message)
+            return writer_stream.getvalue()
 
         return encoder
 
@@ -52,8 +52,8 @@ class TestBenchmark(object):
         def decoder(encoded_message):
             if not isinstance(encoded_message, bytes):
                 raise TypeError
-            stringio = BytesIO(encoded_message)
-            return fastavro.schemaless_reader(stringio, avro_schema_json)
+            reader_stream = BytesIO(encoded_message)
+            return fastavro.schemaless_reader(reader_stream, avro_schema_json)
 
         return decoder
 
